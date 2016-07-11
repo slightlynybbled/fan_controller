@@ -9,6 +9,8 @@ output so that it may control up to 4 additional fans.  The project will feature
  * Soft-start to reduce load on the motherboard
  * Speed control for each fan when a motherboard speed signal is not present
  
+Details of the project may be found at [for(embed)](http://www.forembed.com/category/fan-controller.html).
+ 
 # Project Status #
 
 We have only just completed the initial hardware design and will begin firmware

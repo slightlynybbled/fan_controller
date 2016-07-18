@@ -39,10 +39,10 @@ int main(void) {
     TASK_add(&incPwm, 1);
     
     /* set the initial duty cycles */
-//    setDutyCycleFan0(0);
-//    setDutyCycleFan1(0);
-//    setDutyCycleFan2(0);
-//    setDutyCycleFan3(0);
+    setDutyCycleFan0(0);
+    setDutyCycleFan1(0);
+    setDutyCycleFan2(0);
+    setDutyCycleFan3(0);
     
     TASK_manage();
     
@@ -58,6 +58,9 @@ void incPwm(void){
         dc = 0;
     
     setDutyCycleFan0(dc);
+    setDutyCycleFan1(dc);
+    setDutyCycleFan2(dc);
+    setDutyCycleFan3(dc);
 }
 
 /******************************************************************************/
@@ -109,9 +112,6 @@ void setDutyCycleFan3(q15_t dutyCycle){
 /******************************************************************************/
 /* Initialization functions below this line */
 void initOsc(void){
-    /* for the moment, initialize the oscillator
-     * on the highest internal frequency;  this will likely
-     * change soon */
     CLKDIV = 0;
 
     return;

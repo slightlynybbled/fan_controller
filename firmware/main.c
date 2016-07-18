@@ -51,9 +51,9 @@ int main(void) {
 /******************************************************************************/
 /* Tasks below this line */
 void incPwm(void){
-    static q15_t dc = 0;
+    static q15_t dc = 16384;
     
-    dc += 10;
+    dc += 1;
     if(dc < 0)
         dc = 0;
     
@@ -162,7 +162,7 @@ void initPwm(void){
     CCP4CON2H = 0x8100; // enable output OC4 (fan3)
     
     CCP1CON3L = CCP2CON3L = 0;  // dead time disabled
-    CCP1CON3H = CCP2CON3H = CCP4CON3H = CCP5CON3H = 0x0000;
+    CCP1CON3H = CCP2CON3H = CCP4CON3H = CCP5CON3H = 0x0020;
     
     CCP1CON1Lbits.CCPON = 
             CCP2CON1Lbits.CCPON = 

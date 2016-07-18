@@ -101,7 +101,7 @@ uint8_t DIO_readPin(Port port, uint8_t pin){
         
         case DIO_PORT_B:
         {
-            portValue = PORTA & mask;
+            portValue = PORTB & mask;
             break;
         }
         

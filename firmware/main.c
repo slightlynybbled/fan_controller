@@ -8,7 +8,7 @@
 #include "dio.h"
 
 /*********** Useful defines and macros ****************************************/
-typedef enum {eNONE, ePRE_CCW, ePRE_CW, ePOST} EncoderState;
+typedef enum {eNORMAL, eFAN0_ADJ, eFAN1_ADJ, eFAN2_ADJ, eFAN3_ADJ} FanState;
 
 /*********** Variable Declarations ********************************************/
 
@@ -19,7 +19,7 @@ void initIO(void);
 void initPwm(void);
 void initChangeNotice(void);
 
-void incPwm(void);
+void serviceSwitch(void);
 void serviceEncoder(void);
 
 void setDutyCycleFan0(q15_t dutyCycle);
@@ -39,14 +39,8 @@ int main(void) {
     TASK_init();
     
     /* add tasks */
-    TASK_add(&incPwm, 1);
+    TASK_add(&serviceSwitch, 1);
     TASK_add(&serviceEncoder, 1);
-    
-    /* set the initial duty cycles */
-    setDutyCycleFan0(0);
-    setDutyCycleFan1(0);
-    setDutyCycleFan2(0);
-    setDutyCycleFan3(0);
     
     TASK_manage();
     
@@ -54,17 +48,26 @@ int main(void) {
 }
 /******************************************************************************/
 /* Tasks below this line */
-void incPwm(void){
-    static q15_t dc = 16384;
+void serviceSwitch(void){
+    static uint8_t switchArray = 0;
+    static uint8_t state = 0;
     
-    dc += 1;
-    if(dc < 0)
-        dc = 0;
+    /* debounce */
+    switchArray <<= 1;
+    if(DIO_readPin(DIO_PORT_B, 2)){
+        switchArray |= 0x01;
+    }else{
+        switchArray &= 0xfe;
+    }
     
-    setDutyCycleFan0(dc);
-    setDutyCycleFan1(dc);
-    setDutyCycleFan2(dc);
-    setDutyCycleFan3(dc);
+    /* edge detector */
+    if((switchArray == 0xff) && (state == 0)){
+        DIO_setPin(DIO_PORT_A, 2);
+        state = 1;
+    }else if((switchArray == 0x00) && (state == 1)){
+        DIO_setPin(DIO_PORT_A, 3);
+        state = 0;
+    }
 }
 
 void serviceEncoder(void){
@@ -83,10 +86,12 @@ void serviceEncoder(void){
     
     if(state == 1){
         /* counter-clockwise */
-        DIO_setPin(DIO_PORT_A, 2);
+        //DIO_setPin(DIO_PORT_A, 2);
+        Nop();
     }else if(state == -1){
         /* clockwise */
-        DIO_setPin(DIO_PORT_A, 3);
+        //DIO_setPin(DIO_PORT_A, 3);
+        Nop();
     }else{
         /* when nothing is going on */
         DIO_clearPin(DIO_PORT_A, 3);
@@ -217,6 +222,12 @@ void initPwm(void){
     /* duty cycle registers */
     CCP1RA = CCP2RA = CCP4RA = CCP5RA = 0;
     CCP1RB = CCP2RB = CCP4RB = CCP5RB = 0;
+    
+    /* set the initial duty cycles */
+    setDutyCycleFan0(0);
+    setDutyCycleFan1(0);
+    setDutyCycleFan2(0);
+    setDutyCycleFan3(0);
     
     return;
 }

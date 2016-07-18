@@ -114,10 +114,6 @@ void monitorFanStateTimeout(void){
         if(encoderTime > (lastEncoderTime + FAN_ADJUST_TIMEOUT)){
             fanState = eNORMAL;
         }
-        
-        DIO_setPin(DIO_PORT_A, 2);
-    }else{
-        DIO_clearPin(DIO_PORT_A, 2);
     }
 }
 

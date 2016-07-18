@@ -10,7 +10,11 @@
 /*********** Useful defines and macros ****************************************/
 typedef enum {eNORMAL, eFAN0_ADJ, eFAN1_ADJ, eFAN2_ADJ, eFAN3_ADJ} FanState;
 
+#define FAN_ADJUST_TIMEOUT 5000
+
 /*********** Variable Declarations ********************************************/
+FanState fanState = eNORMAL;
+uint32_t lastEncoderTime = 0;
 
 /*********** Function Declarations ********************************************/
 void initOsc(void);
@@ -21,11 +25,13 @@ void initChangeNotice(void);
 
 void serviceSwitch(void);
 void serviceEncoder(void);
+void monitorFanStateTimeout(void);
 
 void setDutyCycleFan0(q15_t dutyCycle);
 void setDutyCycleFan1(q15_t dutyCycle);
 void setDutyCycleFan2(q15_t dutyCycle);
 void setDutyCycleFan3(q15_t dutyCycle);
+void advanceFanState(void);
 
 /*********** Function Implementations *****************************************/
 int main(void) {
@@ -41,6 +47,7 @@ int main(void) {
     /* add tasks */
     TASK_add(&serviceSwitch, 1);
     TASK_add(&serviceEncoder, 1);
+    TASK_add(&monitorFanStateTimeout, 100);
     
     TASK_manage();
     
@@ -62,11 +69,15 @@ void serviceSwitch(void){
     
     /* edge detector */
     if((switchArray == 0xff) && (state == 0)){
-        DIO_setPin(DIO_PORT_A, 2);
+        /* switch just released */
         state = 1;
+        lastEncoderTime = TASK_getTime();
+        
+        advanceFanState();
     }else if((switchArray == 0x00) && (state == 1)){
-        DIO_setPin(DIO_PORT_A, 3);
+        /* switch just pressed */
         state = 0;
+        lastEncoderTime = TASK_getTime();
     }
 }
 
@@ -86,15 +97,26 @@ void serviceEncoder(void){
     
     if(state == 1){
         /* counter-clockwise */
-        //DIO_setPin(DIO_PORT_A, 2);
-        Nop();
+        lastEncoderTime = TASK_getTime();
     }else if(state == -1){
         /* clockwise */
-        //DIO_setPin(DIO_PORT_A, 3);
-        Nop();
+        lastEncoderTime = TASK_getTime();
+    }
+}
+
+void monitorFanStateTimeout(void){
+    /* when the fan state is not normal AND the encoder hasn't
+     * been triggered for a time, then fall back to the normal
+     * state */
+    if(fanState != eNORMAL){
+        uint32_t encoderTime = TASK_getTime();
+        
+        if(encoderTime > (lastEncoderTime + FAN_ADJUST_TIMEOUT)){
+            fanState = eNORMAL;
+        }
+        
+        DIO_setPin(DIO_PORT_A, 2);
     }else{
-        /* when nothing is going on */
-        DIO_clearPin(DIO_PORT_A, 3);
         DIO_clearPin(DIO_PORT_A, 2);
     }
 }
@@ -145,6 +167,15 @@ void setDutyCycleFan3(q15_t dutyCycle){
         CCP4RB = CCP4PRL - 1;
 }
 
+void advanceFanState(void){
+    switch(fanState){
+        case eNORMAL: fanState = eFAN0_ADJ; break;
+        case eFAN0_ADJ: fanState = eFAN1_ADJ; break;
+        case eFAN1_ADJ: fanState = eFAN2_ADJ; break;
+        case eFAN2_ADJ: fanState = eFAN3_ADJ; break;
+        case eFAN3_ADJ: fanState = eNORMAL; break;
+    }
+}
 
 /******************************************************************************/
 /* Initialization functions below this line */

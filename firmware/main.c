@@ -8,6 +8,7 @@
 #include "dio.h"
 
 /*********** Useful defines and macros ****************************************/
+typedef enum {POS0, POS1, POS2, POS3} EncoderState;
 
 /*********** Variable Declarations ********************************************/
 
@@ -16,6 +17,7 @@ void initOsc(void);
 void initInterrupts(void);
 void initIO(void);
 void initPwm(void);
+void initChangeNotice(void);
 
 void incPwm(void);
 
@@ -31,6 +33,7 @@ int main(void) {
     initInterrupts();
     initIO();
     initPwm();
+    initChangeNotice();
     
     /* initialize the task manager */
     TASK_init();
@@ -127,6 +130,15 @@ void initInterrupts(void){
 }
 
 void initIO(void){
+    /* encoder inputs */
+    DIO_makeInput(DIO_PORT_A, 0);
+    DIO_makeInput(DIO_PORT_A, 1);
+    DIO_makeInput(DIO_PORT_B, 2);
+    
+    DIO_makeDigital(DIO_PORT_A, 0);
+    DIO_makeDigital(DIO_PORT_A, 1);
+    DIO_makeDigital(DIO_PORT_B, 2);
+    
     /* fan PWM outputs */
     DIO_makeOutput(DIO_PORT_B, 11); /* PWM fan0 */
     DIO_makeOutput(DIO_PORT_A, 7);  /* PWM fan1 */
@@ -176,3 +188,18 @@ void initPwm(void){
     return;
 }
 
+void initChangeNotice(void){
+    /* init CN2 (pin2) and CN3 (pin3) for the rotary encoder */
+    CNEN1 = 0x000c;
+    IFS1bits.CNIF = 0;
+    IEC1bits.CNIE = 1;
+}
+
+/******************************************************************************/
+/* Interrupt functions below this line */
+
+void _ISR _CNInterrupt(void){
+    Nop();
+    Nop();
+    Nop();
+}

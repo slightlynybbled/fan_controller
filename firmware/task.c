@@ -13,7 +13,7 @@
 
 /* create structure that consists of a function pointer and period */
 typedef struct {
-	void (*taskFunctPtr)();
+	void (*taskFunctPtr)(void);
 	uint32_t period;
 	uint32_t nextExecutionTime;
 }Task;
@@ -94,7 +94,7 @@ void TASK_init(){
     }
 }
 
-void TASK_add(void (*functPtr)(), uint32_t period){
+void TASK_add(void (*functPtr)(void), uint32_t period){
 	uint16_t i;
 	uint8_t taskExists = 0;
 
@@ -159,7 +159,7 @@ void TMR_init(void (*functPtr)()){
 
     /* period registers */
     CCP3PRH = 0;
-    CCP3PRL = 12000;
+    CCP3PRL = 16000;
     
     CCP3CON1L = 0x0000; // timer mode
     CCP3CON1H = 0x0000;

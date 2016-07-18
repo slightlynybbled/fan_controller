@@ -11,7 +11,7 @@
 #include <stdint.h>
 
 void TASK_init();
-void TASK_add(void (*functPtr)(), uint32_t period);
+void TASK_add(void (*functPtr)(void), uint32_t period);
 void TASK_remove(void (*functPtr)());
 void TASK_manage();
 

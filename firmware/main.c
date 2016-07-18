@@ -8,7 +8,7 @@
 #include "dio.h"
 
 /*********** Useful defines and macros ****************************************/
-typedef enum {POS0, POS1, POS2, POS3} EncoderState;
+typedef enum {eNONE, ePRE_CCW, ePRE_CW, ePOST} EncoderState;
 
 /*********** Variable Declarations ********************************************/
 
@@ -20,6 +20,7 @@ void initPwm(void);
 void initChangeNotice(void);
 
 void incPwm(void);
+void serviceEncoder(void);
 
 void setDutyCycleFan0(q15_t dutyCycle);
 void setDutyCycleFan1(q15_t dutyCycle);
@@ -33,13 +34,13 @@ int main(void) {
     initInterrupts();
     initIO();
     initPwm();
-    initChangeNotice();
     
     /* initialize the task manager */
     TASK_init();
     
     /* add tasks */
     TASK_add(&incPwm, 1);
+    TASK_add(&serviceEncoder, 1);
     
     /* set the initial duty cycles */
     setDutyCycleFan0(0);
@@ -64,6 +65,33 @@ void incPwm(void){
     setDutyCycleFan1(dc);
     setDutyCycleFan2(dc);
     setDutyCycleFan3(dc);
+}
+
+void serviceEncoder(void){
+    /* I found this routine at 
+     * https://www.circuitsathome.com/mcu/reading-rotary-encoder-on-arduino 
+     * appears to work well enough and I would like to give credit where
+     * it is due. */
+    
+    static int8_t enc_states[] = {0,-1,1,0,1,0,0,-1,-1,0,0,1,0,1,-1,0};
+    static uint8_t old_AB = 0;
+    
+    old_AB <<= 2;
+    old_AB |= (uint8_t)(PORTA & 0x0003);
+    
+    int8_t state = enc_states[(old_AB & 0x0f)];
+    
+    if(state == 1){
+        /* counter-clockwise */
+        DIO_setPin(DIO_PORT_A, 2);
+    }else if(state == -1){
+        /* clockwise */
+        DIO_setPin(DIO_PORT_A, 3);
+    }else{
+        /* when nothing is going on */
+        DIO_clearPin(DIO_PORT_A, 3);
+        DIO_clearPin(DIO_PORT_A, 2);
+    }
 }
 
 /******************************************************************************/
@@ -112,6 +140,7 @@ void setDutyCycleFan3(q15_t dutyCycle){
         CCP4RB = CCP4PRL - 1;
 }
 
+
 /******************************************************************************/
 /* Initialization functions below this line */
 void initOsc(void){
@@ -130,6 +159,10 @@ void initInterrupts(void){
 }
 
 void initIO(void){
+    /* debugging outputs */
+    DIO_makeOutput(DIO_PORT_A, 2);
+    DIO_makeOutput(DIO_PORT_A, 3);
+        
     /* encoder inputs */
     DIO_makeInput(DIO_PORT_A, 0);
     DIO_makeInput(DIO_PORT_A, 1);
@@ -186,20 +219,4 @@ void initPwm(void){
     CCP1RB = CCP2RB = CCP4RB = CCP5RB = 0;
     
     return;
-}
-
-void initChangeNotice(void){
-    /* init CN2 (pin2) and CN3 (pin3) for the rotary encoder */
-    CNEN1 = 0x000c;
-    IFS1bits.CNIF = 0;
-    IEC1bits.CNIE = 1;
-}
-
-/******************************************************************************/
-/* Interrupt functions below this line */
-
-void _ISR _CNInterrupt(void){
-    Nop();
-    Nop();
-    Nop();
 }

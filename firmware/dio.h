@@ -5,12 +5,13 @@
 
 typedef enum port{DIO_PORT_A, DIO_PORT_B}Port;
 
-
-
 void DIO_makeInput(Port port, uint8_t pin);
 void DIO_makeOutput(Port port, uint8_t pin);
 void DIO_makeAnalog(Port port, uint8_t pin);
 void DIO_makeDigital(Port port, uint8_t pin);
 
+uint8_t DIO_readPin(Port port, uint8_t pin);
+void DIO_setPin(Port port, uint8_t pin);
+void DIO_clearPin(Port port, uint8_t pin);
 
 #endif

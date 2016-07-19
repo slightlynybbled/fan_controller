@@ -6,6 +6,7 @@
 #include "libmathq15.h"
 #include "task.h"
 #include "dio.h"
+#include "eeprom.h"
 
 /*********** Useful defines and macros ****************************************/
 typedef enum {eINIT, eFAN_START, eNORMAL, eFAN_ADJ} FanState;
@@ -22,6 +23,7 @@ q15_t encoderTurned = 0;
 
 q15_t dcFan[NUM_OF_FANS] = {0};
 q15_t targetDcFan[NUM_OF_FANS] = {0};
+__eds__ q15_t storedTargets[NUM_OF_FANS] __attribute__((space(eedata))) = {32767};
 
 /*********** Function Declarations ********************************************/
 void initOsc(void);
@@ -40,6 +42,7 @@ void setDutyCycleFan1(q15_t dutyCycle);
 void setDutyCycleFan2(q15_t dutyCycle);
 void setDutyCycleFan3(q15_t dutyCycle);
 q15_t adjustDc(q15_t dc, q15_t targetDc);
+void saveFanDc(uint8_t fanNum, q15_t value);
 
 /*********** Function Implementations *****************************************/
 int main(void) {
@@ -74,6 +77,8 @@ void serviceFanState(void){
             for(i = 0; i < NUM_OF_FANS; i++){
                 dcFan[i] = 0;
                 setDutyCycleFan(i, 0);
+                
+                targetDcFan[i] = storedTargets[i];
             }
             
             fanState = eFAN_START;
@@ -148,12 +153,15 @@ void serviceFanState(void){
             /* deal with a timeout */
             if(TASK_getTime() > (lastEncoderTime + FAN_ADJUST_TIMEOUT)){
                 fanState = eINIT;
+                
                 targetDcFan[lastFanAdjusted] = dcFan[lastFanAdjusted];
+                saveFanDc(lastFanAdjusted, dcFan[lastFanAdjusted]);
             }
             
             /* deal with the adjust button being pressed */
             if(switchPressed){
                 targetDcFan[lastFanAdjusted] = dcFan[lastFanAdjusted];
+                saveFanDc(lastFanAdjusted, dcFan[lastFanAdjusted]);
                 
                 lastFanAdjusted++;
                 if(lastFanAdjusted > NUM_OF_FANS)
@@ -312,7 +320,37 @@ q15_t adjustDc(q15_t dc, q15_t targetDc){
     return newDc;
 }
 
-
+void saveFanDc(uint8_t fanNum, q15_t value){
+    /* erase the location to be written to */
+    // Set up NVMCON to erase one word of data EEPROM
+    NVMCON = 0x4058;
+    
+    // Set up a pointer to the EEPROM location to be erased
+    TBLPAG = __builtin_tblpage(storedTargets);
+    uint16_t offset = __builtin_tbloffset(storedTargets) + fanNum;
+    __builtin_tblwtl(offset, offset);
+    
+    // Issue Unlock Sequence & Start Write Cycle
+    asm volatile ("disi #5");
+    __builtin_write_NVM();
+    while(NVMCONbits.WR == 1);  // wait for write sequence to complete
+    
+    /* write the location to be written to */
+    // Set up NVMCON to write one word of data EEPROM
+    NVMCON = 0x4004;
+    
+    
+    
+    // Set up a pointer to the EEPROM location to be erased
+    TBLPAG = __builtin_tblpage(storedTargets);
+    offset = __builtin_tbloffset(storedTargets) + fanNum;
+    __builtin_tblwtl(offset, value);
+    
+    // Issue Unlock Sequence & Start Write Cycle
+    asm volatile ("disi #5");
+    __builtin_write_NVM();
+    while(NVMCONbits.WR == 1);  // wait for write sequence to complete
+}
 
 /******************************************************************************/
 /* Initialization functions below this line */

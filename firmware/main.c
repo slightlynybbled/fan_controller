@@ -384,7 +384,7 @@ void initIO(void){
     DIO_makeOutput(DIO_PORT_A, 7);  /* PWM fan1 */
     DIO_makeOutput(DIO_PORT_B, 7);  /* PWM fan2 */
     
-    DIO_makeInput(DIO_PORT_B, 5);   /* PWM fan3 */
+    DIO_makeInput(DIO_PORT_B, 5);   /* PWM fan3 - idle due to board rework */
     DIO_makeOutput(DIO_PORT_B, 9);  /* PWM fan3 */
     
     /* fan tach inputs */
@@ -392,6 +392,7 @@ void initIO(void){
     DIO_makeInput(DIO_PORT_A, 6);   /* tach fan1 */
     DIO_makeInput(DIO_PORT_B, 8);   /* tach fan2 */
     DIO_makeInput(DIO_PORT_B, 6);   /* tach fan3 */
+    
     DIO_makeDigital(DIO_PORT_B, 13);
     
     /* PWM input, should be configured as an input */

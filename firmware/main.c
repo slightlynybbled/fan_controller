@@ -11,7 +11,7 @@
 typedef enum {eINIT, eFAN_START, eNORMAL, eFAN_ADJ} FanState;
 
 #define FAN_ADJUST_TIMEOUT 5000
-#define MIN_FAN_DC  10000
+#define MIN_FAN_DC  3277
 #define NUM_OF_FANS 4
 
 /*********** Variable Declarations ********************************************/
@@ -130,8 +130,10 @@ void serviceFanState(void){
             else
                 increment = 100 * encoderTurned;
             
+            /* dc = inc + lastDc */
             dc = q15_add(increment, dcFan[lastFanAdjusted]);
             
+            /* place limits on the duty cycle */
             if(dc < 0)
                 dc = 0;
             else if((dcFan[lastFanAdjusted] > 0) && (dc < MIN_FAN_DC))
@@ -146,6 +148,7 @@ void serviceFanState(void){
             /* deal with a timeout */
             if(TASK_getTime() > (lastEncoderTime + FAN_ADJUST_TIMEOUT)){
                 fanState = eINIT;
+                targetDcFan[lastFanAdjusted] = dcFan[lastFanAdjusted];
             }
             
             /* deal with the adjust button being pressed */

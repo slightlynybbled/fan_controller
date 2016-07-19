@@ -14,6 +14,7 @@ typedef enum {eINIT, eFAN_START, eNORMAL, eFAN_ADJ} FanState;
 #define FAN_ADJUST_TIMEOUT 5000
 #define MIN_FAN_DC  3277
 #define NUM_OF_FANS 4
+#define MILLISECONDS_AFTER_PWM_TO_FULL_SPEED 10
 
 /*********** Variable Declarations ********************************************/
 FanState fanState = eINIT;
@@ -23,13 +24,16 @@ q15_t encoderTurned = 0;
 
 q15_t dcFan[NUM_OF_FANS] = {0};
 q15_t targetDcFan[NUM_OF_FANS] = {0};
+q15_t inputPwmDutyCycle = 0;
+
+uint32_t lastTimeInputPwm = 0;
 
 /*********** Function Declarations ********************************************/
 void initOsc(void);
 void initInterrupts(void);
 void initIO(void);
 void initPwm(void);
-void initChangeNotice(void);
+void initTimer1(void);
 
 void serviceFanState(void);
 void serviceSwitch(void);
@@ -49,6 +53,7 @@ int main(void) {
     initInterrupts();
     initIO();
     initPwm();
+    initTimer1();
     
     /* initialize the task manager */
     TASK_init();
@@ -118,6 +123,23 @@ void serviceFanState(void){
                 encoderTurned = 0;
             }
             switchPressed = 0;
+            
+            /* determine when there is a valid input from the 
+             * motherboard and how to scale that input, if present */
+            uint32_t now = TASK_getTime();
+            uint8_t i;
+            for(i = 0; i < NUM_OF_FANS; i++){
+                q15_t dc;
+                
+                /* when motherboard PWM is present, then scale the outputs
+                 * to the stored maximums AND the input PWM; otherwise,
+                 * simply scale to the stored maximums */
+                if(now > (lastTimeInputPwm + MILLISECONDS_AFTER_PWM_TO_FULL_SPEED)){
+                    dc = q15_mul(inputPwmDutyCycle, targetDcFan[i]);
+                }else{
+                    dc = targetDcFan[i];
+                }
+            }
             
             break;
         }
@@ -332,6 +354,17 @@ void initInterrupts(void){
     INTCON1 = 0x8000;
     INTCON2 = 0x4000;
     
+    /* allow change notification interrupts */
+    IFS1bits.CNIF = 0;
+    IEC1bits.CNIE = 1;
+    
+    /* enable CN interrupt for PWM and tach measurements */
+    CNEN1bits.CN14IE = 1;
+    CNEN1bits.CN13IE = 1;
+    CNEN2bits.CN16IE = 1;
+    CNEN2bits.CN22IE = 1;
+    CNEN2bits.CN24IE = 1;
+    
     return;
 }
 
@@ -402,4 +435,52 @@ void initPwm(void){
     setDutyCycleFan3(0);
     
     return;
+}
+
+void initTimer1(void){
+    T1CON = 0x8000;
+    PR1 = 0xffff;
+}
+
+void _ISR _CNInterrupt(void){
+    /* link with TMR1 */
+    uint16_t hwTimer = TMR1;
+    
+    /* measure the PWM period */
+    static uint8_t pwmInLast = 0;
+    uint8_t pwmIn = DIO_readPin(DIO_PORT_B, 12);
+    if(pwmIn != pwmInLast){
+        static uint16_t pwmStartTime;
+        static uint16_t period = 1000;
+        static uint16_t onTime = 0;
+        if(pwmIn){
+            period = hwTimer - pwmStartTime;
+            pwmStartTime = hwTimer;
+        }else{
+            onTime = hwTimer - pwmStartTime;
+            
+            if(onTime >= period)
+                onTime = period - 1;
+            
+            /* calculate the PWM input duty cycle */
+            inputPwmDutyCycle = q15_div(onTime, period);
+            lastTimeInputPwm = TASK_getTime();
+        }
+    }
+    pwmInLast = pwmIn;
+    
+    /* reflect FAN0 tach to the motherboard tach */
+    static uint8_t lastTachFan0 = 0;
+    uint8_t tachFan0 = DIO_readPin(DIO_PORT_B, 13);
+    if(tachFan0 != lastTachFan0){
+        /* set the output tach based on fan 0 */
+        if(tachFan0 == 0){
+            DIO_clearPin(DIO_PORT_B, 14);
+        }else{
+            DIO_setPin(DIO_PORT_B, 14);
+        }
+    }
+    lastTachFan0 = tachFan0;
+    
+    IFS1bits.CNIF = 0;
 }

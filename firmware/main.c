@@ -41,7 +41,6 @@ void setDutyCycleFan1(q15_t dutyCycle);
 void setDutyCycleFan2(q15_t dutyCycle);
 void setDutyCycleFan3(q15_t dutyCycle);
 q15_t adjustDc(q15_t dc, q15_t targetDc);
-void saveFanDc(uint8_t fanNum, q15_t value);
 
 /*********** Function Implementations *****************************************/
 int main(void) {
@@ -318,36 +317,6 @@ q15_t adjustDc(q15_t dc, q15_t targetDc){
     
     return newDc;
 }
-
-//void saveFanDc(uint8_t fanNum, q15_t value){
-//    /* erase the location to be written to */
-//    // Set up NVMCON to erase one word of data EEPROM
-//    NVMCON = 0x4058;
-//    
-//    // Set up a pointer to the EEPROM location to be erased
-//    TBLPAG = __builtin_tblpage(storedTargets);
-//    uint16_t offset = __builtin_tbloffset(storedTargets) + fanNum;
-//    __builtin_tblwtl(offset, offset);
-//    
-//    // Issue Unlock Sequence & Start Write Cycle
-//    asm volatile ("disi #5");
-//    __builtin_write_NVM();
-//    while(NVMCONbits.WR == 1);  // wait for write sequence to complete
-//    
-//    /* write the location to be written to */
-//    // Set up NVMCON to write one word of data EEPROM
-//    NVMCON = 0x4004;
-//    
-//    // Set up a pointer to the EEPROM location to be erased
-//    TBLPAG = __builtin_tblpage(storedTargets);
-//    offset = __builtin_tbloffset(storedTargets) + fanNum;
-//    __builtin_tblwtl(offset, value);
-//    
-//    // Issue Unlock Sequence & Start Write Cycle
-//    asm volatile ("disi #5");
-//    __builtin_write_NVM();
-//    while(NVMCONbits.WR == 1);  // wait for write sequence to complete
-//}
 
 /******************************************************************************/
 /* Initialization functions below this line */

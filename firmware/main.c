@@ -8,13 +8,20 @@
 #include "dio.h"
 
 /*********** Useful defines and macros ****************************************/
-typedef enum {eNORMAL, eFAN0_ADJ, eFAN1_ADJ, eFAN2_ADJ, eFAN3_ADJ} FanState;
+typedef enum {eINIT, eFAN_START, eNORMAL, eFAN_ADJ} FanState;
 
 #define FAN_ADJUST_TIMEOUT 5000
+#define MIN_FAN_DC  10000
+#define NUM_OF_FANS 4
 
 /*********** Variable Declarations ********************************************/
-FanState fanState = eNORMAL;
+FanState fanState = eINIT;
 uint32_t lastEncoderTime = 0;
+uint8_t switchPressed = 0;
+q15_t encoderTurned = 0;
+
+q15_t dcFan[NUM_OF_FANS] = {0};
+q15_t targetDcFan[NUM_OF_FANS] = {0};
 
 /*********** Function Declarations ********************************************/
 void initOsc(void);
@@ -23,15 +30,16 @@ void initIO(void);
 void initPwm(void);
 void initChangeNotice(void);
 
+void serviceFanState(void);
 void serviceSwitch(void);
 void serviceEncoder(void);
-void monitorFanStateTimeout(void);
 
+void setDutyCycleFan(uint8_t fan, q15_t dutyCycle);
 void setDutyCycleFan0(q15_t dutyCycle);
 void setDutyCycleFan1(q15_t dutyCycle);
 void setDutyCycleFan2(q15_t dutyCycle);
 void setDutyCycleFan3(q15_t dutyCycle);
-void advanceFanState(void);
+q15_t adjustDc(q15_t dc, q15_t targetDc);
 
 /*********** Function Implementations *****************************************/
 int main(void) {
@@ -45,16 +53,133 @@ int main(void) {
     TASK_init();
     
     /* add tasks */
+    TASK_add(&serviceFanState, 10);
     TASK_add(&serviceSwitch, 1);
     TASK_add(&serviceEncoder, 1);
-    TASK_add(&monitorFanStateTimeout, 100);
     
     TASK_manage();
     
     return 0;
 }
+
 /******************************************************************************/
 /* Tasks below this line */
+void serviceFanState(void){
+    static uint8_t lastFanAdjusted = 0;
+    
+    switch(fanState){
+        case eINIT:
+        {
+            uint8_t i;
+            for(i = 0; i < NUM_OF_FANS; i++){
+                dcFan[i] = 0;
+                setDutyCycleFan(i, 0);
+            }
+            
+            fanState = eFAN_START;
+            switchPressed = 0;
+            lastFanAdjusted = 0;
+            
+            break;
+        }
+        
+        case eFAN_START:
+        {
+            /* start the fans */
+            uint8_t i;
+            for(i = 0; i < NUM_OF_FANS; i++){
+                if(dcFan[i] != targetDcFan[0]){
+                    dcFan[i] = adjustDc(dcFan[i], targetDcFan[i]);
+                    setDutyCycleFan(i, dcFan[i]);
+                    break;
+                }
+            }
+            
+            /* deal with the adjust button being pressed */
+            if(switchPressed){
+                fanState = eFAN_ADJ;
+                lastFanAdjusted = 0;
+                encoderTurned = 0;
+            }
+            switchPressed = 0;
+            
+            break;
+        }
+        
+        case eNORMAL:
+        {
+            /* deal with the adjust button being pressed */
+            if(switchPressed){
+                fanState = eFAN_ADJ;
+                lastFanAdjusted = 0;
+                encoderTurned = 0;
+            }
+            switchPressed = 0;
+            
+            break;
+        }
+        
+        case eFAN_ADJ:
+        {
+            /* when the encoder is being turned quickly, then move the
+             * duty cycle quickly, else when the encoder is being turned
+             * slowly, then move the duty cycle slowly */
+            q15_t increment, dc;
+            if((encoderTurned < 4) && (encoderTurned > -4))
+                increment = 10 * encoderTurned;
+            else
+                increment = 100 * encoderTurned;
+            
+            dc = q15_add(increment, dcFan[lastFanAdjusted]);
+            
+            if(dc < 0)
+                dc = 0;
+            else if((dcFan[lastFanAdjusted] > 0) && (dc < MIN_FAN_DC))
+                dc = 0;
+            else if((dcFan[lastFanAdjusted] == 0) && (dc > 0))
+                dc = MIN_FAN_DC;
+            
+            dcFan[lastFanAdjusted] = dc;
+            
+            encoderTurned = 0;
+            
+            /* deal with a timeout */
+            if(TASK_getTime() > (lastEncoderTime + FAN_ADJUST_TIMEOUT)){
+                fanState = eINIT;
+            }
+            
+            /* deal with the adjust button being pressed */
+            if(switchPressed){
+                targetDcFan[lastFanAdjusted] = dcFan[lastFanAdjusted];
+                
+                lastFanAdjusted++;
+                if(lastFanAdjusted > NUM_OF_FANS)
+                    lastFanAdjusted = 0;
+            }
+            switchPressed = 0;
+            
+            /* set the appropriate duty cycles - only the fan currently
+             * being adjusted should be greater than 0 */
+            uint8_t i;
+            for(i = 0; i < NUM_OF_FANS; i++){
+                if(i == lastFanAdjusted){
+                    setDutyCycleFan(i, dcFan[i]);
+                }else{
+                    setDutyCycleFan(i, 0);
+                }
+            }
+            
+            break;
+        }
+        
+        default:
+        {
+            while(1);   // programmer's trap
+        }
+        
+    }
+}
+
 void serviceSwitch(void){
     static uint8_t switchArray = 0;
     static uint8_t state = 0;
@@ -73,7 +198,7 @@ void serviceSwitch(void){
         state = 1;
         lastEncoderTime = TASK_getTime();
         
-        advanceFanState();
+        switchPressed = 1;
     }else if((switchArray == 0x00) && (state == 1)){
         /* switch just pressed */
         state = 0;
@@ -98,27 +223,26 @@ void serviceEncoder(void){
     if(state == 1){
         /* counter-clockwise */
         lastEncoderTime = TASK_getTime();
+        encoderTurned--;    // reverse the direction of CW and CCW
     }else if(state == -1){
         /* clockwise */
         lastEncoderTime = TASK_getTime();
-    }
-}
-
-void monitorFanStateTimeout(void){
-    /* when the fan state is not normal AND the encoder hasn't
-     * been triggered for a time, then fall back to the normal
-     * state */
-    if(fanState != eNORMAL){
-        uint32_t encoderTime = TASK_getTime();
-        
-        if(encoderTime > (lastEncoderTime + FAN_ADJUST_TIMEOUT)){
-            fanState = eNORMAL;
-        }
+        encoderTurned++;    // reverse the direction of CW and CCW
     }
 }
 
 /******************************************************************************/
 /* Helper functions below this line */
+void setDutyCycleFan(uint8_t fan, q15_t dutyCycle){
+    switch(fan){
+        case 0:     setDutyCycleFan0(dutyCycle);    break;
+        case 1:     setDutyCycleFan1(dutyCycle);    break;
+        case 2:     setDutyCycleFan2(dutyCycle);    break;
+        case 3:     setDutyCycleFan3(dutyCycle);    break;
+        default:                                    break;
+    }
+}
+
 void setDutyCycleFan0(q15_t dutyCycle){
     CCP2RB = q15_mul(dutyCycle, CCP2PRL);
     
@@ -163,15 +287,29 @@ void setDutyCycleFan3(q15_t dutyCycle){
         CCP4RB = CCP4PRL - 1;
 }
 
-void advanceFanState(void){
-    switch(fanState){
-        case eNORMAL: fanState = eFAN0_ADJ; break;
-        case eFAN0_ADJ: fanState = eFAN1_ADJ; break;
-        case eFAN1_ADJ: fanState = eFAN2_ADJ; break;
-        case eFAN2_ADJ: fanState = eFAN3_ADJ; break;
-        case eFAN3_ADJ: fanState = eNORMAL; break;
+q15_t adjustDc(q15_t dc, q15_t targetDc){
+    q15_t newDc = 0;
+    
+    if(targetDc < MIN_FAN_DC){
+        newDc = 0;
+    }else if((targetDc >= MIN_FAN_DC) && (dc == 0)){
+        newDc = MIN_FAN_DC;
+    }else if(targetDc > dc){
+        /* ramp the fan to its target */
+        q15_t dcDiff = targetDc - dc;
+        if(dcDiff > 10)
+            dcDiff = 10;
+        
+        newDc = dc + dcDiff;
+    }else if(targetDc < dc){
+        /* sudden drops in DC are permitted */
+        newDc = targetDc;
     }
+    
+    return newDc;
 }
+
+
 
 /******************************************************************************/
 /* Initialization functions below this line */

@@ -361,9 +361,6 @@ void initInterrupts(void){
     /* enable CN interrupt for PWM and tach measurements */
     CNEN1bits.CN14IE = 1;
     CNEN1bits.CN13IE = 1;
-    CNEN2bits.CN16IE = 1;
-    CNEN2bits.CN22IE = 1;
-    CNEN2bits.CN24IE = 1;
     
     return;
 }
@@ -395,9 +392,14 @@ void initIO(void){
     DIO_makeInput(DIO_PORT_A, 6);   /* tach fan1 */
     DIO_makeInput(DIO_PORT_B, 8);   /* tach fan2 */
     DIO_makeInput(DIO_PORT_B, 6);   /* tach fan3 */
+    DIO_makeDigital(DIO_PORT_B, 13);
     
-    /* PWM input, should be configured as an input capture */
+    /* PWM input, should be configured as an input */
     DIO_makeInput(DIO_PORT_B, 12);
+    DIO_makeDigital(DIO_PORT_B, 12);
+    
+    /* tach output */
+    DIO_makeOutput(DIO_PORT_B, 14);
 }
 
 void initPwm(void){

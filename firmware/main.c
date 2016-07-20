@@ -44,7 +44,7 @@ void setDutyCycleFan0(q15_t dutyCycle);
 void setDutyCycleFan1(q15_t dutyCycle);
 void setDutyCycleFan2(q15_t dutyCycle);
 void setDutyCycleFan3(q15_t dutyCycle);
-q15_t adjustDc(q15_t dc, q15_t targetDc);
+q15_t rampDc(q15_t dc, q15_t targetDc);
 
 /*********** Function Implementations *****************************************/
 int main(void) {
@@ -97,7 +97,7 @@ void serviceFanState(void){
             uint8_t i;
             for(i = 0; i < NUM_OF_FANS; i++){
                 if(dcFan[i] != targetDcFan[0]){
-                    dcFan[i] = adjustDc(dcFan[i], targetDcFan[i]);
+                    dcFan[i] = rampDc(dcFan[i], targetDcFan[i]);
                     setDutyCycleFan(i, dcFan[i]);
                     break;
                 }
@@ -318,7 +318,7 @@ void setDutyCycleFan3(q15_t dutyCycle){
         CCP4RB = CCP4PRL - 1;
 }
 
-q15_t adjustDc(q15_t dc, q15_t targetDc){
+q15_t rampDc(q15_t dc, q15_t targetDc){
     q15_t newDc = 0;
     
     if(targetDc < MIN_FAN_DC){

@@ -101,7 +101,7 @@ void serviceFanState(void){
             /* start the fans */
             uint8_t i;
             for(i = 0; i < NUM_OF_FANS; i++){
-                if(dcFan[i] != targetDcFan[0]){
+                if(dcFan[i] != targetDcFan[i]){
                     dcFan[i] = rampDc(dcFan[i], targetDcFan[i]);
                     setDutyCycleFan(i, dcFan[i]);
                     break;
@@ -324,7 +324,7 @@ void setDutyCycleFan3(q15_t dutyCycle){
 }
 
 q15_t rampDc(q15_t dc, q15_t targetDc){
-    const q15_t rampIncrement = 10;
+    const q15_t rampIncrement = 50;
     q15_t newDc = 0;
     
     if(targetDc < MIN_FAN_DC){
@@ -337,10 +337,7 @@ q15_t rampDc(q15_t dc, q15_t targetDc){
         if(dcDiff > rampIncrement)
             dcDiff = rampIncrement;
         
-        newDc = dc + dcDiff;
-    }else if(targetDc < dc){
-        /* sudden drops in DC are permitted */
-        newDc = targetDc;
+        newDc = q15_add(dc, dcDiff);
     }
     
     return newDc;

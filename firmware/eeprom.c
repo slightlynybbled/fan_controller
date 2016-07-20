@@ -1,7 +1,7 @@
 #include "eeprom.h"
 #include <xc.h>
 
-uint16_t __attribute__((space(eedata))) eedata = 0x7fff;
+uint16_t __attribute__((space(eedata))) eedata = 0xffff;
 
 void EEPROM_erase(uint16_t address){
     NVMCON = 0x4058;

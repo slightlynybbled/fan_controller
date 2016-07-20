@@ -82,6 +82,11 @@ void serviceFanState(void){
                 setDutyCycleFan(i, 0);
                 
                 targetDcFan[i] = EEPROM_read(i);
+                
+                if(targetDcFan[i] == 0xffff){
+                    targetDcFan[i] = 32767;
+                    EEPROM_write(i, 32767);
+                }
             }
             
             fanState = eFAN_START;
@@ -319,6 +324,7 @@ void setDutyCycleFan3(q15_t dutyCycle){
 }
 
 q15_t rampDc(q15_t dc, q15_t targetDc){
+    const q15_t rampIncrement = 10;
     q15_t newDc = 0;
     
     if(targetDc < MIN_FAN_DC){
@@ -328,8 +334,8 @@ q15_t rampDc(q15_t dc, q15_t targetDc){
     }else if(targetDc > dc){
         /* ramp the fan to its target */
         q15_t dcDiff = targetDc - dc;
-        if(dcDiff > 10)
-            dcDiff = 10;
+        if(dcDiff > rampIncrement)
+            dcDiff = rampIncrement;
         
         newDc = dc + dcDiff;
     }else if(targetDc < dc){

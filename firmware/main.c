@@ -83,7 +83,7 @@ void serviceFanState(void){
                 
                 targetDcFan[i] = EEPROM_read(i);
                 
-                if(targetDcFan[i] == 0xffff){
+                if(targetDcFan[i] == 0){
                     targetDcFan[i] = 32767;
                     EEPROM_write(i, 32767);
                 }

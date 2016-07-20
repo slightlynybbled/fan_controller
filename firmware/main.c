@@ -108,6 +108,15 @@ void serviceFanState(void){
                 }
             }
             
+            /* determine when to exit the eFAN_START state */
+            uint8_t exitCondition = 1;
+            for(i = 0; i < NUM_OF_FANS; i++){
+                if(dcFan[i] != targetDcFan[i])
+                    exitCondition = 0;
+            }
+            if(exitCondition)
+                fanState = eNORMAL;
+            
             /* deal with the adjust button being pressed */
             if(switchPressed){
                 fanState = eFAN_ADJ;
@@ -140,10 +149,15 @@ void serviceFanState(void){
                  * to the stored maximums AND the input PWM; otherwise,
                  * simply scale to the stored maximums */
                 if(now > (lastTimeInputPwm + MILLISECONDS_AFTER_PWM_TO_FULL_SPEED)){
-                    dc = q15_mul(inputPwmDutyCycle, targetDcFan[i]);
-                }else{
                     dc = targetDcFan[i];
+                }else{
+                    dc = q15_mul(inputPwmDutyCycle, targetDcFan[i]);
                 }
+                
+                if(dc < MIN_FAN_DC)
+                    dc = MIN_FAN_DC;
+                
+                setDutyCycleFan(i, dc);
             }
             
             break;

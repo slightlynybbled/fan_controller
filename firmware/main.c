@@ -386,6 +386,10 @@ void initIO(void){
     DIO_makeDigital(DIO_PORT_A, 1);
     DIO_makeDigital(DIO_PORT_B, 2);
     
+    CNPD1bits.CN2PDE = 1;
+    CNPD1bits.CN3PDE = 1;
+    CNPD1bits.CN6PDE = 1;
+    
     /* fan PWM outputs */
     DIO_makeOutput(DIO_PORT_B, 11); /* PWM fan0 */
     DIO_makeOutput(DIO_PORT_A, 7);  /* PWM fan1 */

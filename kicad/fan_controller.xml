@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <export version="D">
   <design>
-    <source>C:\code\fan_controller\kicad\fan_controller.sch</source>
-    <date>6/27/2016 3:48:27 PM</date>
+    <source>C:/code/fan_controller/kicad/fan_controller.sch</source>
+    <date>7/21/2016 8:21:29 AM</date>
     <tool>Eeschema 4.0.1-stable</tool>
     <sheet number="1" name="/" tstamps="/">
       <title_block>
-        <title/>
-        <company/>
-        <rev/>
-        <date/>
+        <title>fan controller</title>
+        <company>for(embed)</company>
+        <rev>1.1</rev>
+        <date>2016-07-21</date>
         <source>fan_controller.sch</source>
-        <comment number="1" value=""/>
+        <comment number="1" value="www.forembed.com"/>
         <comment number="2" value=""/>
         <comment number="3" value=""/>
         <comment number="4" value=""/>
@@ -19,21 +19,9 @@
     </sheet>
   </design>
   <components>
-    <comp ref="U1">
-      <value>pic24f08km202</value>
-      <footprint>kicad_pcb:SSOP-28</footprint>
-      <fields>
-        <field name="MPN">PIC24FV16KM202-I/SS</field>
-        <field name="Description">microcontroller, 5V</field>
-        <field name="Manufacturer">Microchip, Inc.</field>
-      </fields>
-      <libsource lib="custom" part="pic24f08km202"/>
-      <sheetpath names="/" tstamps="/"/>
-      <tstamp>576EEBC4</tstamp>
-    </comp>
     <comp ref="P1">
       <value>CONN_01X04</value>
-      <footprint>Sockets_MOLEX_KK-System:Socket_MOLEX-KK-RM2-54mm_Lock_4pin_straight</footprint>
+      <footprint>lib_pcb:CONN_1x4_PC_FAN</footprint>
       <fields>
         <field name="Manufacturer">Molex</field>
         <field name="MPN">47053-1000</field>
@@ -45,7 +33,7 @@
     </comp>
     <comp ref="P4">
       <value>CONN_01X04</value>
-      <footprint>Sockets_MOLEX_KK-System:Socket_MOLEX-KK-RM2-54mm_Lock_4pin_straight</footprint>
+      <footprint>lib_pcb:CONN_1x4_PC_FAN</footprint>
       <fields>
         <field name="Manufacturer">Molex</field>
         <field name="MPN">47053-1000</field>
@@ -54,18 +42,6 @@
       <libsource lib="conn" part="CONN_01X04"/>
       <sheetpath names="/" tstamps="/"/>
       <tstamp>576F1A21</tstamp>
-    </comp>
-    <comp ref="R2">
-      <value>10k</value>
-      <footprint>kicad_pcb:SM_0603</footprint>
-      <fields>
-        <field name="Manufacturer">Yageo</field>
-        <field name="MPN">RC0603JR-0710KL</field>
-        <field name="Description">resistor, 10k, 0603</field>
-      </fields>
-      <libsource lib="custom" part="R"/>
-      <sheetpath names="/" tstamps="/"/>
-      <tstamp>576F2451</tstamp>
     </comp>
     <comp ref="P2">
       <value>CONN_01X05</value>
@@ -146,45 +122,9 @@
       <sheetpath names="/" tstamps="/"/>
       <tstamp>57715123</tstamp>
     </comp>
-    <comp ref="R4">
-      <value>10k</value>
-      <footprint>kicad_pcb:SM_0603</footprint>
-      <fields>
-        <field name="Manufacturer">Yageo</field>
-        <field name="MPN">RC0603JR-0710KL</field>
-        <field name="Description">resistor, 10k, 0603</field>
-      </fields>
-      <libsource lib="custom" part="R"/>
-      <sheetpath names="/" tstamps="/"/>
-      <tstamp>577155FB</tstamp>
-    </comp>
-    <comp ref="R3">
-      <value>10k</value>
-      <footprint>kicad_pcb:SM_0603</footprint>
-      <fields>
-        <field name="Manufacturer">Yageo</field>
-        <field name="MPN">RC0603JR-0710KL</field>
-        <field name="Description">resistor, 10k, 0603</field>
-      </fields>
-      <libsource lib="custom" part="R"/>
-      <sheetpath names="/" tstamps="/"/>
-      <tstamp>5771584C</tstamp>
-    </comp>
-    <comp ref="R5">
-      <value>10k</value>
-      <footprint>kicad_pcb:SM_0603</footprint>
-      <fields>
-        <field name="Manufacturer">Yageo</field>
-        <field name="MPN">RC0603JR-0710KL</field>
-        <field name="Description">resistor, 10k, 0603</field>
-      </fields>
-      <libsource lib="custom" part="R"/>
-      <sheetpath names="/" tstamps="/"/>
-      <tstamp>577158EC</tstamp>
-    </comp>
     <comp ref="P5">
       <value>CONN_01X04</value>
-      <footprint>Sockets_MOLEX_KK-System:Socket_MOLEX-KK-RM2-54mm_Lock_4pin_straight</footprint>
+      <footprint>lib_pcb:CONN_1x4_PC_FAN</footprint>
       <fields>
         <field name="Manufacturer">Molex</field>
         <field name="MPN">47053-1000</field>
@@ -196,7 +136,7 @@
     </comp>
     <comp ref="P6">
       <value>CONN_01X04</value>
-      <footprint>Sockets_MOLEX_KK-System:Socket_MOLEX-KK-RM2-54mm_Lock_4pin_straight</footprint>
+      <footprint>lib_pcb:CONN_1x4_PC_FAN</footprint>
       <fields>
         <field name="Manufacturer">Molex</field>
         <field name="MPN">47053-1000</field>
@@ -208,7 +148,7 @@
     </comp>
     <comp ref="P3">
       <value>CONN_01X04</value>
-      <footprint>Sockets_MOLEX_KK-System:Socket_MOLEX-KK-RM2-54mm_Lock_4pin_straight</footprint>
+      <footprint>lib_pcb:CONN_1x4_PC_FAN</footprint>
       <fields>
         <field name="Manufacturer">Molex</field>
         <field name="MPN">47053-1000</field>
@@ -217,102 +157,6 @@
       <libsource lib="conn" part="CONN_01X04"/>
       <sheetpath names="/" tstamps="/"/>
       <tstamp>57717989</tstamp>
-    </comp>
-    <comp ref="R9">
-      <value>1k</value>
-      <footprint>kicad_pcb:SM_0603</footprint>
-      <fields>
-        <field name="Manufacturer">Yageo</field>
-        <field name="MPN">RC0603JR-071KL</field>
-        <field name="Description">resistor, 1k, 0603</field>
-      </fields>
-      <libsource lib="custom" part="R"/>
-      <sheetpath names="/" tstamps="/"/>
-      <tstamp>5771CAF0</tstamp>
-    </comp>
-    <comp ref="D4">
-      <value>LED</value>
-      <footprint>lib_pcb:led_0603</footprint>
-      <fields>
-        <field name="Manufacturer">Rohm Semiconductor</field>
-        <field name="MPN">SML-D12U1WT86</field>
-        <field name="Description">LED, 0603</field>
-      </fields>
-      <libsource lib="device" part="LED"/>
-      <sheetpath names="/" tstamps="/"/>
-      <tstamp>5771CB45</tstamp>
-    </comp>
-    <comp ref="R8">
-      <value>1k</value>
-      <footprint>kicad_pcb:SM_0603</footprint>
-      <fields>
-        <field name="Manufacturer">Yageo</field>
-        <field name="MPN">RC0603JR-071KL</field>
-        <field name="Description">resistor, 1k, 0603</field>
-      </fields>
-      <libsource lib="custom" part="R"/>
-      <sheetpath names="/" tstamps="/"/>
-      <tstamp>5771DF0E</tstamp>
-    </comp>
-    <comp ref="D3">
-      <value>LED</value>
-      <footprint>lib_pcb:led_0603</footprint>
-      <fields>
-        <field name="Manufacturer">Rohm Semiconductor</field>
-        <field name="MPN">SML-D12U1WT86</field>
-        <field name="Description">LED, 0603</field>
-      </fields>
-      <libsource lib="device" part="LED"/>
-      <sheetpath names="/" tstamps="/"/>
-      <tstamp>5771DF17</tstamp>
-    </comp>
-    <comp ref="R7">
-      <value>1k</value>
-      <footprint>kicad_pcb:SM_0603</footprint>
-      <fields>
-        <field name="Manufacturer">Yageo</field>
-        <field name="MPN">RC0603JR-071KL</field>
-        <field name="Description">resistor, 1k, 0603</field>
-      </fields>
-      <libsource lib="custom" part="R"/>
-      <sheetpath names="/" tstamps="/"/>
-      <tstamp>5771E18F</tstamp>
-    </comp>
-    <comp ref="D2">
-      <value>LED</value>
-      <footprint>lib_pcb:led_0603</footprint>
-      <fields>
-        <field name="Manufacturer">Rohm Semiconductor</field>
-        <field name="MPN">SML-D12U1WT86</field>
-        <field name="Description">LED, 0603</field>
-      </fields>
-      <libsource lib="device" part="LED"/>
-      <sheetpath names="/" tstamps="/"/>
-      <tstamp>5771E198</tstamp>
-    </comp>
-    <comp ref="R6">
-      <value>1k</value>
-      <footprint>kicad_pcb:SM_0603</footprint>
-      <fields>
-        <field name="Manufacturer">Yageo</field>
-        <field name="MPN">RC0603JR-071KL</field>
-        <field name="Description">resistor, 1k, 0603</field>
-      </fields>
-      <libsource lib="custom" part="R"/>
-      <sheetpath names="/" tstamps="/"/>
-      <tstamp>5771E457</tstamp>
-    </comp>
-    <comp ref="D1">
-      <value>LED</value>
-      <footprint>lib_pcb:led_0603</footprint>
-      <fields>
-        <field name="Manufacturer">Rohm Semiconductor</field>
-        <field name="MPN">SML-D12U1WT86</field>
-        <field name="Description">LED, 0603</field>
-      </fields>
-      <libsource lib="device" part="LED"/>
-      <sheetpath names="/" tstamps="/"/>
-      <tstamp>5771E460</tstamp>
     </comp>
     <comp ref="U2">
       <value>L78M05</value>
@@ -458,6 +302,209 @@
       <sheetpath names="/" tstamps="/"/>
       <tstamp>57729792</tstamp>
     </comp>
+    <comp ref="W1">
+      <value>TEST_1P</value>
+      <footprint>Connect:PINTST</footprint>
+      <libsource lib="conn" part="TEST_1P"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5772AC30</tstamp>
+    </comp>
+    <comp ref="W2">
+      <value>TEST_1P</value>
+      <footprint>Connect:PINTST</footprint>
+      <libsource lib="conn" part="TEST_1P"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5772B135</tstamp>
+    </comp>
+    <comp ref="W3">
+      <value>TEST_1P</value>
+      <footprint>Connect:PINTST</footprint>
+      <libsource lib="conn" part="TEST_1P"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5772B1BC</tstamp>
+    </comp>
+    <comp ref="W4">
+      <value>TEST_1P</value>
+      <footprint>Connect:PINTST</footprint>
+      <libsource lib="conn" part="TEST_1P"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5772B246</tstamp>
+    </comp>
+    <comp ref="Q5">
+      <value>Q_NPN_BEC</value>
+      <footprint>lib_pcb:SOT-23</footprint>
+      <fields>
+        <field name="Manufacturer">ON Semiconductor</field>
+        <field name="MPN">MMBT3904LT1G</field>
+        <field name="Description">transistor, npn, 40V 0.2A SOT-23</field>
+      </fields>
+      <libsource lib="device" part="Q_NPN_BEC"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>578037B9</tstamp>
+    </comp>
+    <comp ref="Q3">
+      <value>Q_NPN_BEC</value>
+      <footprint>lib_pcb:SOT-23</footprint>
+      <fields>
+        <field name="Manufacturer">ON Semiconductor</field>
+        <field name="MPN">MMBT3904LT1G</field>
+        <field name="Description">transistor, npn, 40V 0.2A SOT-23</field>
+      </fields>
+      <libsource lib="device" part="Q_NPN_BEC"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>57807B5F</tstamp>
+    </comp>
+    <comp ref="R15">
+      <value>1k</value>
+      <footprint>kicad_pcb:SM_0603</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="MPN">RC0603JR-071KL</field>
+        <field name="Description">resistor, 1k, 0603</field>
+      </fields>
+      <libsource lib="custom" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>57818418</tstamp>
+    </comp>
+    <comp ref="R16">
+      <value>1k</value>
+      <footprint>kicad_pcb:SM_0603</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="MPN">RC0603JR-071KL</field>
+        <field name="Description">resistor, 1k, 0603</field>
+      </fields>
+      <libsource lib="custom" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>57819687</tstamp>
+    </comp>
+    <comp ref="R17">
+      <value>1k</value>
+      <footprint>kicad_pcb:SM_0603</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="MPN">RC0603JR-071KL</field>
+        <field name="Description">resistor, 1k, 0603</field>
+      </fields>
+      <libsource lib="custom" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>57819F8B</tstamp>
+    </comp>
+    <comp ref="R18">
+      <value>1k</value>
+      <footprint>kicad_pcb:SM_0603</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="MPN">RC0603JR-071KL</field>
+        <field name="Description">resistor, 1k, 0603</field>
+      </fields>
+      <libsource lib="custom" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5781A887</tstamp>
+    </comp>
+    <comp ref="U1">
+      <value>pic24fv08km202</value>
+      <footprint>kicad_pcb:SSOP-28</footprint>
+      <fields>
+        <field name="MPN">PIC24FV16KM202-I/SS</field>
+        <field name="Manufacturer">Microchip, Inc.</field>
+        <field name="Description">microcontroller, 5V, 16MIPS</field>
+      </fields>
+      <libsource lib="custom" part="pic24fv08km202"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>578CC6C7</tstamp>
+    </comp>
+    <comp ref="C12">
+      <value>1uF</value>
+      <footprint>lib_pcb:SM_0603</footprint>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>578CE6B7</tstamp>
+    </comp>
+    <comp ref="Q2">
+      <value>Q_NPN_BEC</value>
+      <footprint>lib_pcb:SOT-23</footprint>
+      <fields>
+        <field name="Manufacturer">ON Semiconductor</field>
+        <field name="MPN">MMBT3904LT1G</field>
+        <field name="Description">transistor, npn, 40V 0.2A SOT-23</field>
+      </fields>
+      <libsource lib="device" part="Q_NPN_BEC"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5780875B</tstamp>
+    </comp>
+    <comp ref="Q4">
+      <value>Q_NPN_BEC</value>
+      <footprint>lib_pcb:SOT-23</footprint>
+      <fields>
+        <field name="Manufacturer">ON Semiconductor</field>
+        <field name="MPN">MMBT3904LT1G</field>
+        <field name="Description">transistor, npn, 40V 0.2A SOT-23</field>
+      </fields>
+      <libsource lib="device" part="Q_NPN_BEC"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>5780673A</tstamp>
+    </comp>
+    <comp ref="R2">
+      <value>1k</value>
+      <footprint>kicad_pcb:SM_0603</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="MPN">RC0603JR-071KL</field>
+        <field name="Description">resistor, 1k, 0603</field>
+      </fields>
+      <libsource lib="custom" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>578FA9D2</tstamp>
+    </comp>
+    <comp ref="R3">
+      <value>10k</value>
+      <footprint>kicad_pcb:SM_0603</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="MPN">RC0603JR-0710KL</field>
+        <field name="Description">resistor, 10k, 0603</field>
+      </fields>
+      <libsource lib="custom" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>578FB6F4</tstamp>
+    </comp>
+    <comp ref="C10">
+      <value>100nF</value>
+      <footprint>lib_pcb:SM_0603</footprint>
+      <fields>
+        <field name="MPN">CC0603ZRY5V7BB104</field>
+        <field name="Description">capacitor, 100nF, 0603</field>
+        <field name="Manufacturer">Yageo</field>
+      </fields>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>578FB9F1</tstamp>
+    </comp>
+    <comp ref="R4">
+      <value>10k</value>
+      <footprint>kicad_pcb:SM_0603</footprint>
+      <fields>
+        <field name="Manufacturer">Yageo</field>
+        <field name="MPN">RC0603JR-0710KL</field>
+        <field name="Description">resistor, 10k, 0603</field>
+      </fields>
+      <libsource lib="custom" part="R"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>578FD54B</tstamp>
+    </comp>
+    <comp ref="C11">
+      <value>100nF</value>
+      <footprint>lib_pcb:SM_0603</footprint>
+      <fields>
+        <field name="MPN">CC0603ZRY5V7BB104</field>
+        <field name="Description">capacitor, 100nF, 0603</field>
+        <field name="Manufacturer">Yageo</field>
+      </fields>
+      <libsource lib="device" part="C"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamp>578FD5FC</tstamp>
+    </comp>
   </components>
   <libparts>
     <libpart lib="device" part="C">
@@ -547,25 +594,6 @@
         <pin num="3" name="OUT" type="input"/>
       </pins>
     </libpart>
-    <libpart lib="device" part="LED">
-      <footprints>
-        <fp>LED-3MM</fp>
-        <fp>LED-5MM</fp>
-        <fp>LED-10MM</fp>
-        <fp>LED-0603</fp>
-        <fp>LED-0805</fp>
-        <fp>LED-1206</fp>
-        <fp>LEDV</fp>
-      </footprints>
-      <fields>
-        <field name="Reference">D</field>
-        <field name="Value">LED</field>
-      </fields>
-      <pins>
-        <pin num="1" name="K" type="passive"/>
-        <pin num="2" name="A" type="passive"/>
-      </pins>
-    </libpart>
     <libpart lib="device" part="Q_NPN_BEC">
       <description>Transistor NPN (general)</description>
       <fields>
@@ -596,6 +624,16 @@
         <pin num="2" name="~" type="passive"/>
       </pins>
     </libpart>
+    <libpart lib="conn" part="TEST_1P">
+      <description>point</description>
+      <fields>
+        <field name="Reference">W</field>
+        <field name="Value">TEST_1P</field>
+      </fields>
+      <pins>
+        <pin num="1" name="1" type="passive"/>
+      </pins>
+    </libpart>
     <libpart lib="custom" part="encoder_rotary_with_switch">
       <fields>
         <field name="Reference">SW</field>
@@ -609,10 +647,10 @@
         <pin num="5" name="~" type="input"/>
       </pins>
     </libpart>
-    <libpart lib="custom" part="pic24f08km202">
+    <libpart lib="custom" part="pic24fv08km202">
       <fields>
         <field name="Reference">U</field>
-        <field name="Value">pic24f08km202</field>
+        <field name="Value">pic24fv08km202</field>
       </fields>
       <pins>
         <pin num="1" name="RA5" type="input"/>
@@ -634,7 +672,7 @@
         <pin num="17" name="RB8" type="input"/>
         <pin num="18" name="RB9" type="input"/>
         <pin num="19" name="RA7" type="input"/>
-        <pin num="20" name="RA6" type="input"/>
+        <pin num="20" name="Vcap" type="input"/>
         <pin num="21" name="RB10" type="input"/>
         <pin num="22" name="RB11" type="input"/>
         <pin num="23" name="RB12" type="input"/>
@@ -647,200 +685,224 @@
     </libpart>
   </libparts>
   <libraries>
-    <library logical="device">
-      <uri>C:\Program Files\KiCad\share\kicad\library\device.lib</uri>
-    </library>
     <library logical="custom">
       <uri>C:\code\kicad_libs\lib_schem\custom.lib</uri>
+    </library>
+    <library logical="device">
+      <uri>C:\Program Files\KiCad\share\kicad\library\device.lib</uri>
     </library>
     <library logical="conn">
       <uri>C:\Program Files\KiCad\share\kicad\library\conn.lib</uri>
     </library>
   </libraries>
   <nets>
-    <net code="1" name="Net-(D3-Pad2)">
-      <node ref="R8" pin="1"/>
-      <node ref="D3" pin="2"/>
-    </net>
-    <net code="2" name="GND">
-      <node ref="C6" pin="2"/>
-      <node ref="P1" pin="1"/>
-      <node ref="C8" pin="2"/>
-      <node ref="C7" pin="2"/>
-      <node ref="C9" pin="2"/>
-      <node ref="U1" pin="8"/>
-      <node ref="U1" pin="27"/>
-      <node ref="R4" pin="2"/>
+    <net code="1" name="/pwm_in">
+      <node ref="R2" pin="2"/>
       <node ref="R3" pin="2"/>
-      <node ref="R5" pin="2"/>
-      <node ref="Q1" pin="2"/>
-      <node ref="C3" pin="2"/>
-      <node ref="U2" pin="2"/>
-      <node ref="C5" pin="2"/>
-      <node ref="C4" pin="2"/>
-      <node ref="D2" pin="1"/>
-      <node ref="C2" pin="2"/>
-      <node ref="C1" pin="2"/>
-      <node ref="P4" pin="1"/>
-      <node ref="P3" pin="1"/>
-      <node ref="P2" pin="3"/>
-      <node ref="P6" pin="1"/>
-      <node ref="D3" pin="1"/>
-      <node ref="P5" pin="1"/>
-      <node ref="D1" pin="1"/>
-      <node ref="D4" pin="1"/>
+      <node ref="P1" pin="4"/>
     </net>
-    <net code="3" name="Net-(D2-Pad2)">
-      <node ref="R7" pin="1"/>
-      <node ref="D2" pin="2"/>
+    <net code="2" name="+12V">
+      <node ref="C1" pin="1"/>
+      <node ref="C6" pin="1"/>
+      <node ref="U2" pin="1"/>
+      <node ref="P1" pin="2"/>
+      <node ref="P4" pin="2"/>
+      <node ref="P3" pin="2"/>
+      <node ref="C4" pin="1"/>
+      <node ref="P6" pin="2"/>
+      <node ref="P5" pin="2"/>
+      <node ref="C7" pin="1"/>
+      <node ref="C5" pin="1"/>
+      <node ref="C3" pin="1"/>
     </net>
-    <net code="4" name="Net-(D4-Pad2)">
-      <node ref="R9" pin="1"/>
-      <node ref="D4" pin="2"/>
+    <net code="3" name="Net-(P1-Pad3)">
+      <node ref="P1" pin="3"/>
+      <node ref="Q1" pin="3"/>
     </net>
-    <net code="5" name="Net-(D1-Pad2)">
-      <node ref="D1" pin="2"/>
-      <node ref="R6" pin="1"/>
+    <net code="4" name="PGED">
+      <node ref="P2" pin="4"/>
+      <node ref="U1" pin="4"/>
     </net>
-    <net code="6" name="Net-(R5-Pad1)">
-      <node ref="U1" pin="6"/>
-      <node ref="SW1" pin="5"/>
-      <node ref="R5" pin="1"/>
+    <net code="5" name="PGEC">
+      <node ref="P2" pin="5"/>
+      <node ref="U1" pin="5"/>
     </net>
-    <net code="7" name="Net-(R4-Pad1)">
-      <node ref="R4" pin="1"/>
-      <node ref="SW1" pin="3"/>
-      <node ref="U1" pin="3"/>
-    </net>
-    <net code="8" name="Net-(R3-Pad1)">
-      <node ref="R3" pin="1"/>
-      <node ref="SW1" pin="1"/>
-      <node ref="U1" pin="2"/>
-    </net>
-    <net code="9" name="+5V">
-      <node ref="R1" pin="1"/>
-      <node ref="P2" pin="2"/>
+    <net code="6" name="+5V">
+      <node ref="C8" pin="1"/>
+      <node ref="C9" pin="1"/>
       <node ref="SW1" pin="4"/>
       <node ref="SW1" pin="2"/>
+      <node ref="P2" pin="2"/>
+      <node ref="U1" pin="28"/>
+      <node ref="C2" pin="1"/>
+      <node ref="U1" pin="13"/>
+      <node ref="R2" pin="1"/>
       <node ref="R10" pin="1"/>
       <node ref="R11" pin="1"/>
       <node ref="R12" pin="1"/>
       <node ref="R13" pin="1"/>
-      <node ref="U1" pin="28"/>
-      <node ref="U1" pin="13"/>
-      <node ref="R2" pin="1"/>
       <node ref="U2" pin="3"/>
-      <node ref="C2" pin="1"/>
-      <node ref="C8" pin="1"/>
-      <node ref="C9" pin="1"/>
+      <node ref="R1" pin="1"/>
     </net>
-    <net code="10" name="~MCLR">
-      <node ref="P2" pin="1"/>
-      <node ref="R1" pin="2"/>
-      <node ref="U1" pin="1"/>
+    <net code="7" name="Net-(U1-Pad26)">
+      <node ref="U1" pin="26"/>
     </net>
-    <net code="11" name="/pwm0">
-      <node ref="P3" pin="4"/>
-      <node ref="R6" pin="2"/>
+    <net code="8" name="Net-(U1-Pad16)">
+      <node ref="U1" pin="16"/>
+    </net>
+    <net code="9" name="Net-(C12-Pad1)">
+      <node ref="U1" pin="20"/>
+      <node ref="C12" pin="1"/>
+    </net>
+    <net code="10" name="Net-(U1-Pad22)">
       <node ref="U1" pin="22"/>
     </net>
-    <net code="12" name="Net-(P1-Pad3)">
-      <node ref="Q1" pin="3"/>
-      <node ref="P1" pin="3"/>
+    <net code="11" name="GND">
+      <node ref="P2" pin="3"/>
+      <node ref="P5" pin="1"/>
+      <node ref="P6" pin="1"/>
+      <node ref="C6" pin="2"/>
+      <node ref="Q5" pin="2"/>
+      <node ref="C1" pin="2"/>
+      <node ref="U2" pin="2"/>
+      <node ref="Q3" pin="2"/>
+      <node ref="C5" pin="2"/>
+      <node ref="C4" pin="2"/>
+      <node ref="P1" pin="1"/>
+      <node ref="C3" pin="2"/>
+      <node ref="C2" pin="2"/>
+      <node ref="P4" pin="1"/>
+      <node ref="P3" pin="1"/>
+      <node ref="C8" pin="2"/>
+      <node ref="C9" pin="2"/>
+      <node ref="Q1" pin="2"/>
+      <node ref="C7" pin="2"/>
+      <node ref="C11" pin="2"/>
+      <node ref="C10" pin="2"/>
+      <node ref="Q4" pin="2"/>
+      <node ref="Q2" pin="2"/>
+      <node ref="C12" pin="2"/>
+      <node ref="U1" pin="27"/>
+      <node ref="U1" pin="8"/>
     </net>
-    <net code="13" name="Net-(Q1-Pad1)">
+    <net code="12" name="Net-(P5-Pad4)">
+      <node ref="Q4" pin="3"/>
+      <node ref="P5" pin="4"/>
+    </net>
+    <net code="13" name="Net-(Q4-Pad1)">
+      <node ref="Q4" pin="1"/>
+      <node ref="R17" pin="1"/>
+    </net>
+    <net code="14" name="Net-(P3-Pad4)">
+      <node ref="P3" pin="4"/>
+      <node ref="Q2" pin="3"/>
+    </net>
+    <net code="15" name="Net-(Q2-Pad1)">
+      <node ref="R15" pin="1"/>
+      <node ref="Q2" pin="1"/>
+    </net>
+    <net code="16" name="Net-(P4-Pad4)">
+      <node ref="Q3" pin="3"/>
+      <node ref="P4" pin="4"/>
+    </net>
+    <net code="17" name="Net-(Q5-Pad1)">
+      <node ref="Q5" pin="1"/>
+      <node ref="R18" pin="1"/>
+    </net>
+    <net code="18" name="Net-(Q3-Pad1)">
+      <node ref="Q3" pin="1"/>
+      <node ref="R16" pin="1"/>
+    </net>
+    <net code="19" name="Net-(P6-Pad4)">
+      <node ref="Q5" pin="3"/>
+      <node ref="P6" pin="4"/>
+    </net>
+    <net code="20" name="Net-(U1-Pad12)">
+      <node ref="W4" pin="1"/>
+      <node ref="U1" pin="12"/>
+    </net>
+    <net code="21" name="/SW(CN7)">
+      <node ref="SW1" pin="5"/>
+      <node ref="U1" pin="7"/>
+    </net>
+    <net code="22" name="/ENC_B(CN6)">
+      <node ref="SW1" pin="3"/>
+      <node ref="U1" pin="6"/>
+    </net>
+    <net code="23" name="/ENC_A(CN2)">
+      <node ref="SW1" pin="1"/>
+      <node ref="U1" pin="2"/>
+    </net>
+    <net code="24" name="analog_cmd">
+      <node ref="C11" pin="1"/>
+      <node ref="U1" pin="3"/>
+      <node ref="R4" pin="1"/>
+    </net>
+    <net code="25" name="Net-(U1-Pad11)">
+      <node ref="U1" pin="11"/>
+      <node ref="W3" pin="1"/>
+    </net>
+    <net code="26" name="Net-(C10-Pad1)">
+      <node ref="C10" pin="1"/>
+      <node ref="R3" pin="1"/>
+      <node ref="R4" pin="2"/>
+    </net>
+    <net code="27" name="~MCLR">
+      <node ref="R1" pin="2"/>
+      <node ref="U1" pin="1"/>
+      <node ref="P2" pin="1"/>
+    </net>
+    <net code="28" name="Net-(Q1-Pad1)">
       <node ref="R14" pin="2"/>
       <node ref="Q1" pin="1"/>
     </net>
-    <net code="14" name="/sense_out">
+    <net code="29" name="Net-(U1-Pad10)">
+      <node ref="W2" pin="1"/>
+      <node ref="U1" pin="10"/>
+    </net>
+    <net code="30" name="Net-(U1-Pad9)">
+      <node ref="W1" pin="1"/>
+      <node ref="U1" pin="9"/>
+    </net>
+    <net code="31" name="Net-(R14-Pad1)">
       <node ref="U1" pin="25"/>
       <node ref="R14" pin="1"/>
     </net>
-    <net code="15" name="+12V">
-      <node ref="P3" pin="2"/>
-      <node ref="P6" pin="2"/>
-      <node ref="P5" pin="2"/>
-      <node ref="P1" pin="2"/>
-      <node ref="C7" pin="1"/>
-      <node ref="C6" pin="1"/>
-      <node ref="C5" pin="1"/>
-      <node ref="C3" pin="1"/>
-      <node ref="C1" pin="1"/>
-      <node ref="U2" pin="1"/>
-      <node ref="C4" pin="1"/>
-      <node ref="P4" pin="2"/>
-    </net>
-    <net code="16" name="Net-(U1-Pad21)">
-      <node ref="U1" pin="21"/>
-    </net>
-    <net code="17" name="Net-(U1-Pad26)">
-      <node ref="U1" pin="26"/>
-    </net>
-    <net code="18" name="pwm_in">
-      <node ref="R2" pin="2"/>
+    <net code="32" name="/pwm0(OC2B)">
+      <node ref="R15" pin="2"/>
       <node ref="U1" pin="23"/>
-      <node ref="P1" pin="4"/>
     </net>
-    <net code="19" name="Net-(U1-Pad12)">
-      <node ref="U1" pin="12"/>
-    </net>
-    <net code="20" name="Net-(U1-Pad11)">
-      <node ref="U1" pin="11"/>
-    </net>
-    <net code="21" name="Net-(U1-Pad10)">
-      <node ref="U1" pin="10"/>
-    </net>
-    <net code="22" name="Net-(U1-Pad9)">
-      <node ref="U1" pin="9"/>
-    </net>
-    <net code="23" name="Net-(U1-Pad7)">
-      <node ref="U1" pin="7"/>
-    </net>
-    <net code="24" name="PGEC">
-      <node ref="U1" pin="5"/>
-      <node ref="P2" pin="5"/>
-    </net>
-    <net code="25" name="PGED">
-      <node ref="U1" pin="4"/>
-      <node ref="P2" pin="4"/>
-    </net>
-    <net code="26" name="Net-(U1-Pad18)">
-      <node ref="U1" pin="18"/>
-    </net>
-    <net code="27" name="/sense3">
+    <net code="33" name="/sense3">
       <node ref="U1" pin="15"/>
-      <node ref="R13" pin="2"/>
       <node ref="P6" pin="3"/>
+      <node ref="R13" pin="2"/>
     </net>
-    <net code="28" name="/sense2">
-      <node ref="P5" pin="3"/>
-      <node ref="U1" pin="17"/>
+    <net code="34" name="/sense2">
       <node ref="R12" pin="2"/>
+      <node ref="U1" pin="17"/>
+      <node ref="P5" pin="3"/>
     </net>
-    <net code="29" name="/sense1">
+    <net code="35" name="/sense1">
       <node ref="P4" pin="3"/>
       <node ref="R11" pin="2"/>
-      <node ref="U1" pin="20"/>
+      <node ref="U1" pin="21"/>
     </net>
-    <net code="30" name="/pwm3">
+    <net code="36" name="/pwm3(OC1E)">
       <node ref="U1" pin="14"/>
-      <node ref="P6" pin="4"/>
-      <node ref="R9" pin="2"/>
+      <node ref="R18" pin="2"/>
     </net>
-    <net code="31" name="/pwm2">
-      <node ref="U1" pin="16"/>
-      <node ref="P5" pin="4"/>
-      <node ref="R8" pin="2"/>
+    <net code="37" name="/pwm2(OC4)">
+      <node ref="R17" pin="2"/>
+      <node ref="U1" pin="18"/>
     </net>
-    <net code="32" name="/pwm1">
-      <node ref="R7" pin="2"/>
+    <net code="38" name="/pwm1(OC5)">
+      <node ref="R16" pin="2"/>
       <node ref="U1" pin="19"/>
-      <node ref="P4" pin="4"/>
     </net>
-    <net code="33" name="/sense0">
-      <node ref="P3" pin="3"/>
+    <net code="39" name="/sense0(CN13)">
       <node ref="U1" pin="24"/>
       <node ref="R10" pin="2"/>
+      <node ref="P3" pin="3"/>
     </net>
   </nets>
 </export>

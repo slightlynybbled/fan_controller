@@ -2,7 +2,7 @@
 <export version="D">
   <design>
     <source>C:/code/fan_controller/kicad/fan_controller.sch</source>
-    <date>7/21/2016 8:21:29 AM</date>
+    <date>8/5/2016 9:09:54 AM</date>
     <tool>Eeschema 4.0.1-stable</tool>
     <sheet number="1" name="/" tstamps="/">
       <title_block>
@@ -417,6 +417,11 @@
     <comp ref="C12">
       <value>1uF</value>
       <footprint>lib_pcb:SM_0603</footprint>
+      <fields>
+        <field name="MPN">CC0603ZRY5V7BB105</field>
+        <field name="Manufacturer">Yageo</field>
+        <field name="Description">capacitor, ceramic, 1uF 16V</field>
+      </fields>
       <libsource lib="device" part="C"/>
       <sheetpath names="/" tstamps="/"/>
       <tstamp>578CE6B7</tstamp>
@@ -685,11 +690,11 @@
     </libpart>
   </libparts>
   <libraries>
-    <library logical="custom">
-      <uri>C:\code\kicad_libs\lib_schem\custom.lib</uri>
-    </library>
     <library logical="device">
       <uri>C:\Program Files\KiCad\share\kicad\library\device.lib</uri>
+    </library>
+    <library logical="custom">
+      <uri>C:\code\kicad_libs\lib_schem\custom.lib</uri>
     </library>
     <library logical="conn">
       <uri>C:\Program Files\KiCad\share\kicad\library\conn.lib</uri>

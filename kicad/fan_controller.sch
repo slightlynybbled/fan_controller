@@ -1089,6 +1089,9 @@ F 0 "C12" H 6425 5800 50  0000 L CNN
 F 1 "1uF" H 6425 5600 50  0000 L CNN
 F 2 "lib_pcb:SM_0603" H 6438 5550 50  0001 C CNN
 F 3 "" H 6400 5700 50  0000 C CNN
+F 4 "CC0603ZRY5V7BB105" H 6400 5700 60  0001 C CNN "MPN"
+F 5 "Yageo" H 6400 5700 60  0001 C CNN "Manufacturer"
+F 6 "capacitor, ceramic, 1uF 16V" H 6400 5700 60  0001 C CNN "Description"
 	1    6400 5700
 	1    0    0    -1  
 $EndComp
@@ -1523,4 +1526,6 @@ Text Label 3400 4500 0    60   ~ 0
 SW(CN7)
 Text Notes 2100 3550 0    60   ~ 0
 Use internal pull-downs for the\nencoder and switch outputs.
+Text Notes 900  4900 0    60   ~ 0
+Add thermistor for temperature-controlled cooling?
 $EndSCHEMATC

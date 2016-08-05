@@ -1,11 +1,12 @@
 Item	Qty	Reference	Manufacturer	MPN	Description	Datasheet	
 1	10	 C1, C2, C3, C4, C5, C6, C8, C9, C10, C11	Yageo	CC0603ZRY5V7BB104	capacitor, 100nF, 0603		
-2	1	 C7	Kemet	ESK476M035AC3AA	capacitor, alum, 47uF 35V, radial		
-3	5	 P1, P3, P4, P5, P6	Molex	47053-1000	PC fan connector, 4-pin		
-4	6	 P2, W1, W2, W3, W4, C12					
-5	5	 Q1, Q2, Q3, Q4, Q5	ON Semiconductor	MMBT3904LT1G	transistor, npn, 40V 0.2A SOT-23		
-6	7	 R1, R3, R4, R10, R11, R12, R13	Yageo	RC0603JR-0710KL	resistor, 10k, 0603		
-7	6	 R2, R14, R15, R16, R17, R18	Yageo	RC0603JR-071KL	resistor, 1k, 0603		
-8	1	 SW1	TT Electronics/BI	EN12-HS22AF30	encoder, rotary, top-adjust with switch		
-9	1	 U1	Microchip, Inc.	PIC24FV16KM202-I/SS	microcontroller, 5V, 16MIPS		
-10	1	 U2	ON Semiconductor	MC7805CDTG	voltage regulator, linear, 5V 1A, DPAK		
+2	1	 C12	Yageo	CC0603ZRY5V7BB105	capacitor, ceramic, 1uF 16V		
+3	1	 C7	Kemet	ESK476M035AC3AA	capacitor, alum, 47uF 35V, radial		
+4	5	 P1, P3, P4, P5, P6	Molex	47053-1000	PC fan connector, 4-pin		
+5	5	 P2, W1, W2, W3, W4					
+6	5	 Q1, Q2, Q3, Q4, Q5	ON Semiconductor	MMBT3904LT1G	transistor, npn, 40V 0.2A SOT-23		
+7	7	 R1, R3, R4, R10, R11, R12, R13	Yageo	RC0603JR-0710KL	resistor, 10k, 0603		
+8	6	 R2, R14, R15, R16, R17, R18	Yageo	RC0603JR-071KL	resistor, 1k, 0603		
+9	1	 SW1	TT Electronics/BI	EN12-HS22AF30	encoder, rotary, top-adjust with switch		
+10	1	 U1	Microchip, Inc.	PIC24FV16KM202-I/SS	microcontroller, 5V, 16MIPS		
+11	1	 U2	ON Semiconductor	MC7805CDTG	voltage regulator, linear, 5V 1A, DPAK		

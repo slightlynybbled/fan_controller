@@ -16,6 +16,15 @@ typedef enum {eINIT, eFAN_START, eNORMAL, eFAN_ADJ} FanState;
 #define NUM_OF_FANS 4
 #define MILLISECONDS_AFTER_PWM_TO_FULL_SPEED 100
 
+#define SWITCH_PORT DIO_PORT_B
+#define SWITCH_PIN  3
+#define SWITCH      PORTBbits.RB3
+
+#define ENC_A_PORT  DIO_PORT_A
+#define ENC_A_PIN   0
+#define ENC_B_PORT  DIO_PORT_B
+#define ENC_B_PIN   2
+
 /*********** Variable Declarations ********************************************/
 FanState fanState = eINIT;
 uint32_t lastEncoderTime = 0;
@@ -226,7 +235,7 @@ void serviceSwitch(void){
     
     /* debounce */
     switchArray <<= 1;
-    if(DIO_readPin(DIO_PORT_B, 2)){
+    if(SWITCH){
         switchArray |= 0x01;
     }else{
         switchArray &= 0xfe;
@@ -255,8 +264,10 @@ void serviceEncoder(void){
     static int8_t enc_states[] = {0,-1,1,0,1,0,0,-1,-1,0,0,1,0,1,-1,0};
     static uint8_t old_AB = 0;
     
+    uint8_t new_AB = PORTAbits.RA0 | (PORTBbits.RB2 << 1);
+    
     old_AB <<= 2;
-    old_AB |= (uint8_t)(PORTA & 0x0003);
+    old_AB |= new_AB;
     
     int8_t state = enc_states[(old_AB & 0x0f)];
     
@@ -306,6 +317,16 @@ void setDutyCycleFan1(q15_t dutyCycle){
 }
 
 void setDutyCycleFan2(q15_t dutyCycle){
+    CCP4RB = q15_mul(dutyCycle, CCP4PRL);
+    
+    /* when CCPxRB == 0, PWM doesn't update properly */
+    if(CCP4RB < 2)
+        CCP4RB = 2;
+    else if(CCP4RB >= CCP4PRL)
+        CCP4RB = CCP4PRL - 1;
+}
+
+void setDutyCycleFan3(q15_t dutyCycle){
     CCP1RB = q15_mul(dutyCycle, CCP1PRL);
     
     /* when CCPxRB < 2, PWM doesn't update properly */
@@ -315,16 +336,6 @@ void setDutyCycleFan2(q15_t dutyCycle){
         CCP1RB = CCP1PRL - 1;
     
     return;
-}
-
-void setDutyCycleFan3(q15_t dutyCycle){
-    CCP4RB = q15_mul(dutyCycle, CCP4PRL);
-    
-    /* when CCPxRB == 0, PWM doesn't update properly */
-    if(CCP4RB < 2)
-        CCP4RB = 2;
-    else if(CCP4RB >= CCP4PRL)
-        CCP4RB = CCP4PRL - 1;
 }
 
 q15_t rampDc(q15_t dc, q15_t targetDc){
@@ -378,37 +389,38 @@ void initIO(void){
     DIO_makeOutput(DIO_PORT_A, 3);
         
     /* encoder inputs */
-    DIO_makeInput(DIO_PORT_A, 0);
-    DIO_makeInput(DIO_PORT_A, 1);
-    DIO_makeInput(DIO_PORT_B, 2);
+    DIO_makeInput(ENC_A_PORT, ENC_A_PIN);
+    DIO_makeInput(ENC_B_PORT, ENC_B_PIN);
+    DIO_makeInput(SWITCH_PORT, SWITCH_PIN);
     
-    DIO_makeDigital(DIO_PORT_A, 0);
-    DIO_makeDigital(DIO_PORT_A, 1);
-    DIO_makeDigital(DIO_PORT_B, 2);
+    DIO_makeDigital(ENC_A_PORT, ENC_A_PIN);
+    DIO_makeDigital(ENC_B_PORT, ENC_B_PIN);
+    DIO_makeDigital(SWITCH_PORT, SWITCH_PIN);
     
+    /* enable switch and encoder pull-down resistors */
     CNPD1bits.CN2PDE = 1;
-    CNPD1bits.CN3PDE = 1;
     CNPD1bits.CN6PDE = 1;
+    CNPD1bits.CN7PDE = 1;
     
     /* fan PWM outputs */
-    DIO_makeOutput(DIO_PORT_B, 11); /* PWM fan0 */
+    DIO_makeOutput(DIO_PORT_B, 12); /* PWM fan0 */
     DIO_makeOutput(DIO_PORT_A, 7);  /* PWM fan1 */
-    DIO_makeOutput(DIO_PORT_B, 7);  /* PWM fan2 */
-    
-    DIO_makeInput(DIO_PORT_B, 5);   /* PWM fan3 - idle due to board rework */
-    DIO_makeOutput(DIO_PORT_B, 9);  /* PWM fan3 */
+    DIO_makeOutput(DIO_PORT_B, 9);  /* PWM fan2 */
+    DIO_makeOutput(DIO_PORT_B, 5);  /* PWM fan3 */
     
     /* fan tach inputs */
     DIO_makeInput(DIO_PORT_B, 13);  /* tach fan0 */
-    DIO_makeInput(DIO_PORT_A, 6);   /* tach fan1 */
+    DIO_makeInput(DIO_PORT_B, 10);  /* tach fan1 */
     DIO_makeInput(DIO_PORT_B, 8);   /* tach fan2 */
     DIO_makeInput(DIO_PORT_B, 6);   /* tach fan3 */
     
     DIO_makeDigital(DIO_PORT_B, 13);
+    DIO_makeDigital(DIO_PORT_B, 8);
+    DIO_makeDigital(DIO_PORT_B, 6);
     
     /* PWM input, should be configured as an input */
-    DIO_makeInput(DIO_PORT_B, 12);
-    DIO_makeDigital(DIO_PORT_B, 12);
+    DIO_makeInput(DIO_PORT_A, 1);
+    DIO_makeAnalog(DIO_PORT_A, 1);
     
     /* tach output */
     DIO_makeOutput(DIO_PORT_B, 14);
@@ -425,13 +437,17 @@ void initPwm(void){
     CCP1CON1H = CCP2CON1H = CCP4CON1H = CCP5CON1H = 0x0000;
     CCP1CON2L = CCP2CON2L = CCP4CON2L = CCP5CON2L = 0x0000;
     
-    CCP2CON2H = 0x8100; // enable output 0C2A (fan0)
+    CCP2CON2H = 0x8200; // enable output 0C2B (fan0)
     CCP5CON2H = 0x8100; // enable output OC5 (fan1)
-    CCP1CON2H = 0x8100; // enable output OC1A (fan2)
-    CCP4CON2H = 0x8100; // enable output OC4 (fan3)
+    CCP4CON2H = 0x8100; // enable output OC4 (fan2)
+    CCP1CON2H = 0x9000; // enable output OC1E (fan3)
     
     CCP1CON3L = CCP2CON3L = 0;  // dead time disabled
-    CCP1CON3H = CCP2CON3H = CCP4CON3H = CCP5CON3H = 0x0020;
+    
+    /**/
+    CCP1CON3H = CCP2CON3H = CCP4CON3H = CCP5CON3H = 0;
+    CCP1CON3Hbits.POLACE = CCP4CON3Hbits.POLACE = CCP5CON3Hbits.POLACE = 1;
+    CCP2CON3Hbits.POLBDF = 1;
     
     CCP1CON1Lbits.CCPON = 
             CCP2CON1Lbits.CCPON = 

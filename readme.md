@@ -13,5 +13,4 @@ Details of the project may be found at [for(embed)](http://www.forembed.com/cate
  
 # Project Status #
 
-We have only just completed the initial hardware design and will begin firmware
-development when the hardware has been received.
+Firmware for v1.1 is in progress and testing is looking good!

@@ -11,9 +11,10 @@
 /*********** Useful defines and macros ****************************************/
 typedef enum {eINIT, eFAN_START, eNORMAL, eFAN_ADJ} FanState;
 
-#define FAN_ADJUST_TIMEOUT 5000
-#define MIN_FAN_DC  3277
-#define NUM_OF_FANS 4
+#define FAN_ADJUST_TIMEOUT  5000
+#define MIN_INPUT_DC        2500
+#define MIN_FAN_DC          3277
+#define NUM_OF_FANS         4
 #define MILLISECONDS_AFTER_PWM_TO_FULL_SPEED 100
 
 #define SWITCH_PORT DIO_PORT_B
@@ -39,6 +40,7 @@ void initOsc(void);
 void initInterrupts(void);
 void initIO(void);
 void initPwm(void);
+void initAdc(void);
 
 void serviceFanState(void);
 void serviceSwitch(void);
@@ -58,6 +60,7 @@ int main(void) {
     initInterrupts();
     initIO();
     initPwm();
+    initAdc();
     
     /* initialize the task manager */
     TASK_init();
@@ -76,6 +79,11 @@ int main(void) {
 /* Tasks below this line */
 void serviceFanState(void){
     static uint8_t lastFanAdjusted = 0;
+    
+    /* ADC conversion to determine the input duty cycle */
+    AD1CON1bits.SAMP = 0;
+    while(!AD1CON1bits.DONE);   // ...wait for the ADC to finish...
+    q15_t inputPwmDutyCycle = (q15_t)(ADC1BUF0 >> 1);
     
     switch(fanState){
         case eINIT:
@@ -142,19 +150,19 @@ void serviceFanState(void){
             }
             switchPressed = 0;
             
-            /* determine when there is a valid input from the 
-             * motherboard and how to scale that input, if present */
+
+            /* scale the target duty cycle to the input duty cycle */
             uint8_t i;
             for(i = 0; i < NUM_OF_FANS; i++){
                 q15_t dc;
                 
-                /* scale the output to the input duty cycle (analog value) */
-                /* calculate the PWM input duty cycle */
-                q15_t inputPwmDutyCycle = 32767;    // TODO: make this the analog value
                 dc = q15_mul(inputPwmDutyCycle, targetDcFan[i]);
 
                 if(dc < MIN_FAN_DC)
                     dc = MIN_FAN_DC;
+                
+                if(inputPwmDutyCycle < MIN_INPUT_DC)
+                    dc = 0;
                 
                 setDutyCycleFan(i, dc);
             }
@@ -463,6 +471,25 @@ void initPwm(void){
     setDutyCycleFan1(0);
     setDutyCycleFan2(0);
     setDutyCycleFan3(0);
+    
+    return;
+}
+
+void initAdc(void){
+    /* set up the analog pin as analog inputs */
+    DIO_makeInput(DIO_PORT_A, 1);
+    DIO_makeAnalog(DIO_PORT_A, 1);
+    
+    AD1CON1 = 0x0200;   /* Clear sample bit to trigger conversion
+                         * FORM = left justified  */
+    AD1CON2 = 0x0000;   /* Set AD1IF after every 1 samples */
+    AD1CON3 = 0x0007;   /* Sample time = 1Tad, Tad = 8 * Tcy */
+    
+    AD1CHS = 0x0101;    /* AN1 */
+    AD1CSSL = 0;
+    
+    AD1CON1bits.ADON = 1; // turn ADC ON
+    AD1CON1bits.ASAM = 1; // auto-sample
     
     return;
 }

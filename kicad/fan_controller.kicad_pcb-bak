@@ -14,8 +14,11 @@
 
   (page A4)
   (title_block
-    (date 2016-07-20)
+    (title "fan controller")
+    (date 2016-07-21)
     (rev v1.1)
+    (company "for(embed)")
+    (comment 1 www.forembed.com)
   )
 
   (layers

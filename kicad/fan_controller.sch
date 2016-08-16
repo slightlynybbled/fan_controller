@@ -865,7 +865,7 @@ F 6 "resistor, 1k, 0603" V 1850 2450 60  0001 C CNN "Description"
 	1    1850 2450
 	0    1    1    0   
 $EndComp
-Text Label 2200 2350 0    60   ~ 0
+Text Label 1200 1850 0    60   ~ 0
 sense_out
 $Comp
 L C C9

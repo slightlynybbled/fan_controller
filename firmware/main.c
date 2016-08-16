@@ -356,7 +356,7 @@ q15_t rampDc(q15_t dc, q15_t targetDc){
         newDc = MIN_FAN_DC;
     }else if(targetDc > dc){
         /* ramp the fan to its target */
-        q15_t dcDiff = targetDc - dc;
+        q15_t dcDiff = q15_add(targetDc, -dc);
         if(dcDiff > rampIncrement)
             dcDiff = rampIncrement;
         

@@ -1035,6 +1035,7 @@ F 2 "Diodes_SMD:D_0805" V 2780 5850 50  0001 C CNN
 F 3 "" H 2850 5850 50  0001 C CNN
 F 4 "Murata Electronics North America" V 2850 5850 60  0001 C CNN "Manufacturer"
 F 5 "NCP18XQ102J03RB" V 2850 5850 60  0001 C CNN "MPN"
+F 6 "Thermistor, NTC" H 2850 5850 60  0001 C CNN "Description"
 	1    2850 5850
 	1    0    0    -1  
 $EndComp

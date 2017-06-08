@@ -29,6 +29,7 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
+LIBS:schematic
 LIBS:fan_controller-cache
 EELAYER 25 0
 EELAYER END
@@ -36,8 +37,8 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "fan controller"
-Date "2016-07-21"
-Rev "1.1"
+Date "2017-06-07"
+Rev "1.2"
 Comp "for(embed)"
 Comment1 "www.forembed.com"
 Comment2 ""
@@ -1667,6 +1668,17 @@ F 4 "Yageo" V 9200 5100 60  0001 C CNN "Manufacturer"
 F 5 "RC0603JR-0710KL" V 9200 5100 60  0001 C CNN "MPN"
 F 6 "resistor, 10k, 0603" V 9200 5100 60  0001 C CNN "Description"
 	1    9200 5100
+	1    0    0    -1  
+$EndComp
+$Comp
+L LOGO #G?
+U 1 1 5938AD3B
+P 7200 6750
+F 0 "#G?" H 7200 6595 60  0001 C CNN
+F 1 "LOGO" H 7200 6905 60  0001 C CNN
+F 2 "" H 7200 6750 60  0001 C CNN
+F 3 "" H 7200 6750 60  0001 C CNN
+	1    7200 6750
 	1    0    0    -1  
 $EndComp
 $EndSCHEMATC

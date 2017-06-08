@@ -13,4 +13,11 @@ Details of the project may be found at [for(embed)](http://www.forembed.com/cate
  
 # Project Status #
 
-Firmware for v1.1 is in progress and testing is looking good!
+Firmware for v1.2 (optional thermistor control) is under development.
+
+![Top, v1.2](img/fc-1v2-top.png)
+![Bottom, v1.2](img/fc-1v2-bot.png)
+
+Firmware for v1.1 is complete!  Testing has been completely successful!
+
+
